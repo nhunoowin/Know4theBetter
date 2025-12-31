@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Know For The Better - Learn. Impact. Change.</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        nav {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #764ba2;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .section {
+            display: none;
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: fadeIn 0.5s;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            color: #764ba2;
+            margin-bottom: 1rem;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #555;
+            margin: 1rem 0 2rem;
+        }
+
+        .logo-graphic {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .impact-meter {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .impact-meter h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .impact-number {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .ad-placeholder {
+            background: #f0f0f0;
+            border: 2px dashed #ccc;
+            padding: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+            border-radius: 8px;
+            color: #999;
+        }
+
+        .quiz-container {
+            margin-top: 2rem;
+        }
+
+        .reading-passage {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .question {
+            margin: 2rem 0;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .option {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .option:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+        }
+
+        .option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .option.correct {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+
+        .option.incorrect {
+            background: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+
+        .feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .next-button {
+            background: #28a745;
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .next-button.show {
+            display: inline-block;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .progress-section {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+
+        .progress-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .progress-bar-container {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            height: 30px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: white;
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #4facfe;
+        }
+
+        .achievement-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .visual-separator {
+            text-align: center;
+            margin: 3rem 0;
+            position: relative;
+        }
+
+        .visual-separator::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #667eea, transparent);
+        }
+
+        .visual-separator span {
+            background: white;
+            padding: 0 1rem;
+            position: relative;
+            font-size: 2rem;
+        }
+
+        .impact-visual {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .impact-icon {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .impact-icon-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 0.5rem;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .arrow {
+            font-size: 2rem;
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .section {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .progress-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .arrow {
+                transform: rotate(90deg);
+                margin: 1rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="#home" onclick="showSection('home')">Home</a></li>
+            <li><a href="#quiz" onclick="showSection('quiz')">Start Learning</a></li>
+            <li><a href="#progress" onclick="showSection('progress')">My Progress</a></li>
+            <li><a href="#impact" onclick="showSection('impact')">Our Impact</a></li>
+            <li><a href="#about" onclick="showSection('about')">About</a></li>
+            <li><a href="#how" onclick="showSection('how')">How It Works</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <!-- HOME SECTION -->
+        <div id="home" class="section active">
+            <div class="hero">
+                <div class="logo-graphic">🌍</div>
+                <h1>Know For The Better</h1>
+                <p>Learn about global issues. Answer questions. Make a real difference.</p>
+                <button class="cta-button" onclick="showSection('quiz')">Start Learning Now</button>
+            </div>
+
+            <div class="impact-meter">
+                <h3>Your Personal Impact</h3>
+                <div class="impact-number">$<span id="totalImpact">0.00</span></div>
+                <p>Every quiz you complete helps fund humanitarian causes</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3>Learn</h3>
+                    <p>Read about global issues, education, and humanitarian topics</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>Quiz</h3>
+                    <p>Test your knowledge with meaningful questions</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">❤️</div>
+                    <h3>Impact</h3>
+                    <p>Your engagement generates donations to real causes</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Track</h3>
+                    <p>Monitor your progress and see your growing impact</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUIZ SECTION -->
+        <div id="quiz" class="section">
+            <h1>Learn & Make Impact</h1>
+            
+            <div class="ad-placeholder">
+                Ad Space - Google AdSense will go here
+            </div>
+
+            <div class="quiz-container" id="quizContainer">
+                <!-- Quiz content will be inserted here -->
+            </div>
+        </div>
+
+        <!-- PROGRESS SECTION -->
+        <div id="progress" class="section">
+            <h1>Your Learning Journey</h1>
+            
+            <div class="progress-section">
+                <h2 style="color: white; text-align: center;">Your Stats</h2>
+                <div class="progress-stats">
+                    <div class="stat-card">
+                        <span class="stat-number" id="quizzesCompleted">0</span>
+                        <span class="stat-label">Quizzes Completed</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="correctAnswers">0</span>
+                        <span class="stat-label">Correct Answers</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="accuracyRate">0%</span>
+                        <span class="stat-label">Accuracy Rate</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">$<span id="progressImpact">0.00</span></span>
+                        <span class="stat-label">Impact Generated</span>
+                    </div>
+                </div>
+
+                <h3 style="color: white; margin-top: 2rem; text-align: center;">Progress to Next Milestone</h3>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progressBar" style="width: 0%;">0%</div>
+                </div>
+                <p style="text-align: center; opacity: 0.9; margin-top: 0.5rem;">
+                    <span id="progressText">Complete your first quiz to start your journey!</span>
+                </p>
+
+                <div style="margin-top: 2rem; text-align: center;">
+                    <h3 style="color: white; margin-bottom: 1rem;">Achievements Unlocked</h3>
+                    <div id="achievements">
+                        <span class="achievement-badge" style="opacity: 0.5;">🌟 First Quiz - Locked</span>
+                        <span class="achievement-badge" style="opacity: 0.5;">🔥 5 Quiz Streak - Locked</span>
+                        <span class="achievement-badge" style="opacity: 0.5;">💯 Perfect Score - Locked</span>
+                        <span class="achievement-badge" style="opacity: 0.5;">🎯 10 Quizzes - Locked</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="cta-button" onclick="showSection('quiz')">Continue Learning</button>
+            </div>
+        </div>
+
+        <!-- IMPACT SECTION -->
+        <div id="impact" class="section">
+            <h1>Our Collective Impact</h1>
+            
+            <div class="impact-meter">
+                <h3>Community Impact This Month</h3>
+                <div class="impact-number">$<span id="monthlyImpact">0.00</span></div>
+                <p>Generated by learners like you</p>
+            </div>
+
+            <div class="visual-separator">
+                <span>💫</span>
+            </div>
+
+            <h2>How Your Learning Creates Change</h2>
+            <div class="impact-visual">
+                <div class="impact-icon">
+                    <div class="impact-icon-circle">📖</div>
+                    <p><strong>You Read</strong></p>
+                </div>
+                <div class="arrow">→</div>
+                <div class="impact-icon">
+                    <div class="impact-icon-circle">✓</div>
+                    <p><strong>You Answer</strong></p>
+                </div>
+                <div class="arrow">→</div>
+                <div class="impact-icon">
+                    <div class="impact-icon-circle">💰</div>
+                    <p><strong>Ads Generate $</strong></p>
+                </div>
+                <div class="arrow">→</div>
+                <div class="impact-icon">
+                    <div class="impact-icon-circle">🌍</div>
+                    <p><strong>We Donate</strong></p>
+                </div>
+            </div>
+
+            <div class="visual-separator">
+                <span>✨</span>
+            </div>
+
+            <h2>Where Your Learning Goes</h2>
+            <p style="margin: 1rem 0;">Every quiz you complete generates ad revenue that is donated to verified humanitarian organizations:</p>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🌍</div>
+                    <h3>Crisis Relief</h3>
+                    <p>Supporting urgent humanitarian needs in Sudan and other crisis zones</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📖</div>
+                    <h3>Education Access</h3>
+                    <p>Funding education initiatives for underserved youth globally</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌱</div>
+                    <h3>Youth Programs</h3>
+                    <p>Building sustainable youth development programs</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🇻🇳</div>
+                    <h3>Vietnam Focus</h3>
+                    <p>Long-term education and empowerment initiatives in Vietnam</p>
+                </div>
+            </div>
+
+            <h2 style="margin-top: 2rem;">Transparency Promise</h2>
+            <p>We publish monthly reports showing exactly how much was generated and where every dollar went. Check back at the start of each month for updates.</p>
+        </div>
+
+        <!-- ABOUT SECTION -->
+        <div id="about" class="section">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <div class="logo-graphic">🌍</div>
+            </div>
+            
+            <h1 style="text-align: center;">About Know For The Better</h1>
+            <p style="text-align: center; font-size: 1.1rem; margin-bottom: 2rem;">A student-led initiative combining education with humanitarian impact</p>
+            
+            <div class="visual-separator">
+                <span>💡</span>
+            </div>
+
+            <h2>Our Mission</h2>
+            <p>We empower people to learn about global issues while directly contributing to positive change. Every quiz answered, every passage read, generates real-world impact through ethical monetization.</p>
+
+            <div class="feature-grid" style="margin-top: 2rem;">
+                <div class="feature-card">
+                    <div class="feature-icon">🎓</div>
+                    <h3>Student-Powered</h3>
+                    <p>Built by students who believe young people can drive meaningful change</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤝</div>
+                    <h3>Community-Driven</h3>
+                    <p>Every user becomes part of a global movement for good</p>
+                </div>
+            </div>
+
+            <div class="visual-separator">
+                <span>🎯</span>
+            </div>
+
+            <h2>Why We Started</h2>
+            <p>As high school students, we saw two problems: people often feel powerless to help global causes, and meaningful education about humanitarian issues is hard to access. We built this platform to solve both.</p>
+
+            <div class="visual-separator">
+                <span>🌏</span>
+            </div>
+
+            <h2>Our Focus Areas</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🆘</div>
+                    <h3>Humanitarian Crises</h3>
+                    <p>Education about urgent global situations requiring immediate attention</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3>Education Rights</h3>
+                    <p>Exploring education as a fundamental human right for all children</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💪</div>
+                    <h3>Youth Empowerment</h3>
+                    <p>How young people can become agents of change in their communities</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🇻🇳</div>
+                    <h3>Vietnam Development</h3>
+                    <p>Special focus on education and youth programs in Vietnam</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- HOW IT WORKS SECTION -->
+        <div id="how" class="section">
+            <h1>How It Works</h1>
+            
+            <h2>The Learning Loop</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">1️⃣</div>
+                    <h3>Read</h3>
+                    <p>Access short, informative passages about important global topics</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">2️⃣</div>
+                    <h3>Answer</h3>
+                    <p>Complete quiz questions to reinforce your learning</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">3️⃣</div>
+                    <h3>Generate Impact</h3>
+                    <p>Each interaction creates ad revenue donated to causes</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">4️⃣</div>
+                    <h3>Track Progress</h3>
+                    <p>Monitor your learning journey and growing impact</p>
+                </div>
+            </div>
+
+            <div class="visual-separator">
+                <span>💰</span>
+            </div>
+
+            <h2>The Revenue Model</h2>
+            <p>We use Google AdSense to display ethical advertisements on our platform. When you engage with content, these ads generate small amounts of revenue. 100% of this revenue (after basic hosting costs) is donated to verified charitable organizations.</p>
+
+            <div class="feature-grid" style="margin-top: 2rem;">
+                <div class="feature-card">
+                    <div class="feature-icon">💵</div>
+                    <h3>Revenue Generated</h3>
+                    <p>Ads create income from user engagement</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎁</div>
+                    <h3>100% Donated</h3>
+                    <p>All profits go to humanitarian causes</p>
+                </div>
+            </div>
+
+            <div class="visual-separator">
+                <span>🔍</span>
+            </div>
+
+            <h2>Trust & Transparency</h2>
+            <p style="margin-bottom: 1rem;">We publish monthly impact reports showing:</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Full Breakdown</h3>
+                    <p>Total revenue, costs, and net donations</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏛️</div>
+                    <h3>Recipients</h3>
+                    <p>Which organizations received funding and why</p>
+                </div>
+            </div>
+
+            <div class="visual-separator">
+                <span>✨</span>
+            </div>
+
+            <h2>No Cost to You</h2>
+            <p style="text-align: center; font-size: 1.1rem;">This platform is completely free. You never need to donate money or pay for access. Simply by learning, you're making a difference.</p>
+        </div>
+    </div>
+
+    <script>
+        // Navigation
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+            window.scrollTo(0, 0);
+            
+            if (sectionId === 'quiz') {
+                loadQuiz();
+            } else if (sectionId === 'progress') {
+                updateProgressDisplay();
+            }
+        }
+
+        // Quiz Data
+        const quizData = [
+            {
+                topic: "Global Humanitarian Crisis: Sudan",
+                passage: "Sudan has been facing one of the world's worst humanitarian crises since April 2023, when conflict erupted between rival military factions. Over 10 million people have been displaced from their homes, making it the largest displacement crisis globally. The conflict has devastated healthcare systems, schools, and basic infrastructure. Many families lack access to food, clean water, and medical care. International humanitarian organizations are working to provide emergency aid, but ongoing violence makes it difficult to reach those in need.",
+                question: "What makes Sudan's current situation particularly challenging for humanitarian aid?",
+                options: [
+                    "The country is too small for organizations to operate",
+                    "Ongoing violence makes it difficult to reach people in need",
+                    "There are no international organizations willing to help",
+                    "The crisis only started recently with minimal impact"
+                ],
+                correct: 1,
+                explanation: "The passage explains that ongoing violence makes it difficult for humanitarian organizations to reach those in need, despite their efforts to provide emergency aid."
+            },
+            {
+                topic: "Education as a Human Right",
+                passage: "The United Nations recognizes education as a fundamental human right, yet over 260 million children worldwide are out of school. Education transforms lives by providing knowledge, skills, and opportunities for better employment and civic participation. It helps break cycles of poverty and empowers individuals to improve their communities. However, barriers such as conflict, poverty, discrimination, and lack of infrastructure prevent millions from accessing quality education. Organizations worldwide work to remove these barriers and ensure every child can learn.",
+                question: "According to the passage, why is education considered transformative?",
+                options: [
+                    "It only helps wealthy families become wealthier",
+                    "It provides entertainment and leisure activities",
+                    "It helps break cycles of poverty and empowers communities",
+                    "It is required by law in all countries"
+                ],
+                correct: 2,
+                explanation: "The passage states that education 'helps break cycles of poverty and empowers individuals to improve their communities,' making it a transformative force in people's lives."
+            },
+            {
+                topic: "Youth Empowerment and Leadership",
+                passage: "Young people are powerful agents of change in their communities and around the world. From climate activism to social justice movements, youth-led initiatives have shaped global conversations and driven real policy changes. When young people are given platforms, resources, and support, they bring fresh perspectives and innovative solutions to longstanding problems. Youth empowerment involves not just encouraging young voices, but actively including them in decision-making processes that affect their futures. Organizations focusing on youth development recognize that investing in young leaders today creates stronger, more equitable societies tomorrow.",
+                question: "What does effective youth empowerment require beyond just encouragement?",
+                options: [
+                    "Expensive technology and equipment",
+                    "Active inclusion in decision-making processes",
+                    "Waiting until they become adults",
+                    "Limiting their involvement to social media"
+                ],
+                correct: 1,
+                explanation: "The passage emphasizes that youth empowerment involves 'actively including them in decision-making processes that affect their futures,' not just encouraging their voices."
+            },
+            {
+                topic: "Clean Water Access and Global Health",
+                passage: "Access to clean water is essential for human survival and development, yet 2 billion people worldwide lack access to safely managed drinking water services. Contaminated water spreads diseases like cholera, dysentery, and typhoid, which disproportionately affect children under five years old. Water scarcity also forces people, especially women and girls, to spend hours each day collecting water instead of attending school or earning income. Investing in water infrastructure, sanitation systems, and hygiene education creates lasting improvements in public health, educational outcomes, and economic opportunity for entire communities.",
+                question: "How does water scarcity impact education according to the passage?",
+                options: [
+                    "Schools don't teach about water conservation",
+                    "People must spend time collecting water instead of attending school",
+                    "Water is too expensive for schools to afford",
+                    "Students prefer collecting water to studying"
+                ],
+                correct: 1,
+                explanation: "The passage states that water scarcity 'forces people, especially women and girls, to spend hours each day collecting water instead of attending school,' directly impacting educational access."
+            }
+        ];
+
+        // Progress tracking variables
+        let currentQuizIndex = 0;
+        let totalQuizzesCompleted = 0;
+        let totalCorrectAnswers = 0;
+        let totalAnswers = 0;
+        let selectedOption = null;
+
+        // Load progress from browser storage
+        function loadProgress() {
+            const saved = {
+                quizzes: totalQuizzesCompleted,
+                correct: totalCorrectAnswers,
